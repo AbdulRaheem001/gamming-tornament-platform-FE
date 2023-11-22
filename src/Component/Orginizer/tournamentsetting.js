@@ -1,27 +1,5 @@
 
-// import React from 'react'
-// import Sidebar from './Components/sidebar'
-// import Box from '@mui/material/Box';
-// import Typography from '@mui/material/Typography';
-
-
-
-// function Settings() {
-//     return (
-//         <>
-//             <Box sx={{ display: 'flex' }}>
-//                 <Sidebar />
-//                 <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '64px' }}>
-//                     <h1>This is Settings page</h1>
-//                 </Box>
-//             </Box>
-//         </>
-//     )
-// }
-
-// export default Settings
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -31,26 +9,87 @@ import TabContext from '@mui/lab/TabContext';
 import { Button, FormControl, FormControlLabel, InputLabel, Radio, RadioGroup, Select, TextField } from '@mui/material';
 import Sidebar from './Components/sidebar';
 import MenuItem from '@mui/material/MenuItem';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 
 const Settings = () => {
     // State to manage the active tab
     const [activeTab, setActiveTab] = useState('general');
 
-    // State for the fields
-    const [tournamentName, setTournamentName] = useState('Tournament Name');
-    const [discipline, setDiscipline] = useState('Game 1');
-    const [platformName, setPlatformName] = useState('PC');
-    const [teamSize, setTeamSize] = useState(50);
-    const [projectName, setProjectName] = useState(100);
+    const [tournamentName, setTournamentName] = useState('');
+    const [gameName, setGameName] = useState('');
+    const [platformName, setPlatformName] = useState('');
+    const [teamSize, setTeamSize] = useState('');
+    const [tournamentFee, setTournamentFee] = useState('');
+    const [description, setDescription] = useState('');
+    const [gameRules, setGameRules] = useState('');
+    const [tournamentPrize, setTournamentPrize] = useState('');
     const [timezone, setTimezone] = useState('');
-
+    const [dateTime, setDateTime]=useState('');
+    const tornamentId = sessionStorage.getItem("tornamentId");
+    const [ tornamentData, setTornamentData ] = useState({});
+    useEffect(() => {
+        axios
+          .get(`http://localhost:8000/tornament/getTournamentById/${tornamentId}`)
+          .then((res) => {
+            setTornamentData(res.data);
+            setTournamentName(res.data.tournamentName);
+            setGameName(res.data.gameID.name); // Assuming 'gameName' is the correct field name in your schema
+            console.log('Data GAme Name', res.data.gameID.name);
+            setPlatformName(res.data.gameID.platform); // Assuming 'platformName' is the field name for platform
+            setTeamSize(res.data.teamSize);
+            setTournamentFee(res.data.fee);
+            setTournamentPrize(res.data.winningPrice);
+            setDescription(res.data.description);
+            setGameRules(res.data.rules);
+            setTimezone(new Date(res.data.started).toISOString().substr(0, 16)); // Adjust time format as needed
+          })
+          .catch((err) => {
+            console.log("Error", err);
+          });
+    }, [tornamentId]);
     const handleChangeTab = (event, newValue) => {
         setActiveTab(newValue);
     };
 
+    const updateTournament = async () => {
+        let response
+        try {
+
+            const updatedData = {
+                tournamentName,
+                timezone,
+                description,
+                gameRules,
+              };
+              console.log('update data ', tornamentId);
+              response = await axios.put(`http://localhost:8000/tornament/updateTournament/${tornamentId}`, updatedData);
+
+              if (response && response.data) {
+                  // Show success notification
+                  toast.success("Success Notification !", {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+      
+                  return response.data; // Return the response data if needed
+              } else {
+                  // Show error notification for unexpected response
+                  toast.error("Error: Unexpected response format", {
+                    position: toast.POSITION.TOP_CENTER,
+                  });
+              }
+          } catch (error) {
+              // Show error notification
+              toast.error("Error Notification !", {
+                  position: toast.POSITION.TOP_CENTER,
+              });
+              throw new Error(`Error updating tournament: ${error.message}`);
+          }
+      };
     return (
         <>
+        <ToastContainer/>
             <Box sx={{ display: 'flex' }}>
                 <Sidebar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '64px' }}>
@@ -85,45 +124,31 @@ const Settings = () => {
                                         margin='normal'
                                         onChange={(e) => setTournamentName(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: false,
                                         }}
                                     />
                                     <FormControl variant="outlined" fullWidth margin='normal' >
-                                        <InputLabel htmlFor="game-select">Select the Game</InputLabel>
-                                        <Select
-                                            label="Select the Game"
-                                            value={discipline}
-                                            onChange={(e) => setDiscipline(e.target.value)}
-                                            inputProps={{
-                                                name: 'game',
-                                                id: 'game-select',
+                                        
+                                        <TextField
+                                            label="Game Name"
+                                            value={gameName}
+                                            InputProps={{
+                                                readOnly: true, 
+                                                style: { opacity: 0.6, pointerEvents: 'none' },
                                             }}
                                         >
-                                            <MenuItem value="Game 1">Game 1</MenuItem>
-                                            <MenuItem value="Game 2">Game 2</MenuItem>
-                                            <MenuItem value="Game 3">Game 3</MenuItem>
-                                            <MenuItem value="Game 4">Game 4</MenuItem>
-                                            <MenuItem value="Game 5">Game 5</MenuItem>
-                                            <MenuItem value="Game 6">Game 6</MenuItem>
-                                        </Select>
+                                        </TextField>
                                     </FormControl>
                                     <FormControl variant="outlined" fullWidth margin='normal' >
-                                        <InputLabel htmlFor="platform-select">Select Platform</InputLabel>
-                                        <Select
-                                            label="Select Platform"
+                                        <TextField
+                                            label="Platform Name"
                                             value={platformName}
-
-                                            onChange={(e) => setPlatformName(e.target.value)}
-                                            inputProps={{
-                                                name: 'platform',
-                                                id: 'platform-select',
+                                            InputProps={{
+                                                readOnly: true, 
+                                                style: { opacity: 0.6, pointerEvents: 'none' },
                                             }}
                                         >
-                                            <MenuItem value="PC">PC</MenuItem>
-                                            <MenuItem value="Mobile">Mobile</MenuItem>
-                                            <MenuItem value="PS4">PS4</MenuItem>
-                                            <MenuItem value="Xbox">Xbox</MenuItem>
-                                        </Select>
+                                        </TextField>
                                     </FormControl>
                                     <TextField
                                         label="Number of Participants"
@@ -132,33 +157,33 @@ const Settings = () => {
                                         value={teamSize}
                                         type='number'
                                         margin='normal'
-                                        onChange={(e) => setTeamSize(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: true, 
+                                            style: { opacity: 0.6, pointerEvents: 'none' },
                                         }}
                                     />
                                     <TextField
                                         label="Enter the Fee"
                                         variant="outlined"
                                         fullWidth
-                                        value={projectName}
+                                        value={tournamentFee}
                                         type='number'
                                         margin='normal'
-                                        onChange={(e) => setProjectName(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: true, 
+                                            style: { opacity: 0.6, pointerEvents: 'none' },
                                         }}
                                     />
                                     <TextField
                                         label="Enter the Prize Pool"
                                         variant="outlined"
                                         fullWidth
-                                        value={projectName}
+                                        value={tournamentPrize}
                                         type='number'
                                         margin='normal'
-                                        onChange={(e) => setProjectName(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: true, 
+                                            style: { opacity: 0.6, pointerEvents: 'none' },
                                         }}
                                     />
                                     <TextField
@@ -176,7 +201,7 @@ const Settings = () => {
                                             readOnly: false, // Set this to true to disable editing
                                         }}
                                     />
-                                    <Button variant="contained" color="primary" fullWidth sx={{marginTop:'10px'}}>
+                                    <Button variant="contained" color="primary" fullWidth sx={{marginTop:'10px'}} onClick={()=>updateTournament()}>
                                         Update
                                     </Button>
                                 </form>
@@ -190,9 +215,11 @@ const Settings = () => {
                                         fullWidth
                                         margin="normal"
                                         multiline
+                                        value={description}
                                         rows={5}
+                                        onChange={(e)=>setDescription(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: false,
                                         }}
                                     />
                                     <TextField
@@ -201,11 +228,13 @@ const Settings = () => {
                                         margin="normal"
                                         multiline
                                         rows={8}
+                                        value={gameRules}
+                                        onChange={(e)=>setGameRules(e.target.value)}
                                         InputProps={{
-                                            readOnly: false, // Set this to true to disable editing
+                                            readOnly: false, 
                                         }}
                                     />
-                                    <Button variant="contained" color="primary" fullWidth sx={{ marginTop: '10px' }}>
+                                    <Button variant="contained" color="primary" fullWidth sx={{ marginTop: '10px' }} onClick={()=>updateTournament()}>
                                         Update
                                     </Button>
                                 </form>

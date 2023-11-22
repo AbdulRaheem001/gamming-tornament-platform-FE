@@ -14,7 +14,7 @@ const TournamentList = () => {
 const navigate= useNavigate();
   useEffect(() => {
     // Fetch the user's ID here, you can use the 'getUserId' function
-    const userId = getUserId(); // Replace this with your actual way of getting the user's ID.
+    const userId = sessionStorage.getItem("id");
 
     // Fetch the tournaments for the specific organizer
     axios
@@ -28,7 +28,8 @@ const navigate= useNavigate();
   }, []);
 
   const tornamentView = (id)=>{
-    navigate(`/overview/${id}`);
+    sessionStorage.setItem("tornamentId", id);
+    navigate(`/overview`);
   }
   return (
     <>

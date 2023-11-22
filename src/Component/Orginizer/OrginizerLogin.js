@@ -1,74 +1,95 @@
-import React from 'react';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { setUserId } from './Components/userID';
-import Navbar from '../Commen/Navbar';
+import React from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { setUserId } from "./Components/userID";
+import Navbar from "../Commen/Navbar";
+import { useDispatch } from "react-redux";
+import { setToken, setEmail, setId, setName } from "../../redux/userSlice";
+import { ToastContainer, toast } from "react-toastify"; // Import toast
 
 const validationSchema = Yup.object().shape({
   email: Yup.string()
-    .email('Invalid email address')
-    .required('Email is required'),
+    .email("Invalid email address")
+    .required("Email is required"),
   password: Yup.string()
-    .required('Password is required')
-    .min(8, 'Password must be at least 8 characters long')
+    .required("Password is required")
+    .min(8, "Password must be at least 8 characters long"),
 });
 
 const initialValues = {
-  email: '',
-  password: '',
-  role: '',
+  email: "",
+  password: "",
+  role: "",
 };
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const handleSubmit = (values) => {
-    values.role = 'organizer';
-    console.log(values);
+    values.role = "organizer";
+    // Displaying the Toastify notification
+    toast("Logging in...", { position: toast.POSITION.TOP_CENTER });
+
     axios
-      .post('http://localhost:8000/auth/login', values)
+      .post("http://localhost:8000/auth/login", values)
       .then((response) => {
-        console.log('Sign in successful:', response.data);
         const userData = response.data;
-        console.log("ID->",userData.data.user);
-    setUserId(userData.data.user);
-        navigate('/organizer_panel');
+        sessionStorage.setItem("isLoggedIn", true);
+        sessionStorage.setItem("id", userData.data.user._id);
+        sessionStorage.setItem("Email", userData.data.user.email);
+        dispatch(setToken(userData.data.tokenData));
+        dispatch(setId(userData.data.user._id));
+        dispatch(setEmail(userData.data.user.email));
+        dispatch(
+          setName(
+            userData.data.user.firstName + " " + userData.data.user.lastName
+          )
+        );
+        console.log("datd", userData.data.user);
+
+        //setUserId(userData.data.user);
+        navigate("/organizer_panel");
       })
       .catch((error) => {
-        console.error('Sign in failed:', error.response.data);
-        alert("Faild to LogIn")
+        console.error("Sign in failed:", error.response.data);
+        toast.error("Failed to log in. Please check your credentials.", {
+          position: toast.POSITION.TOP_CENTER,
+        });
       });
   };
 
   return (
     <ThemeProvider theme={createTheme()}>
+    <ToastContainer/>
       <Navbar />
       <Box
         sx={{
-          backgroundColor: '#000', // Black background
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          padding: '20%', // At least 20% padding from all sides
+          backgroundColor: "#000", // Black background
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          padding: "20%", // At least 20% padding from all sides
         }}
       >
-        <Card sx={{ backgroundColor: '#45f884' }}>
+        <Card sx={{ backgroundColor: "#45f884" }}>
           <CardContent>
             <Grid container>
               <CssBaseline />
@@ -77,7 +98,12 @@ const SignIn = () => {
                 <img
                   src="https://img.freepik.com/free-vector/character-playing-videogame_52683-36686.jpg?w=740&t=st=1697111280~exp=1697111880~hmac=528346101d1416ce99c0266419968bb3d0275a73f97ea3b8d0971ef48ab3270e"
                   alt="Background"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px' }}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    borderRadius: "10px",
+                  }}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -85,12 +111,12 @@ const SignIn = () => {
                   sx={{
                     my: 4,
                     mx: 4,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
                   }}
                 >
-                  <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                  <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
                     <LockOutlinedIcon />
                   </Avatar>
                   <Typography component="h1" variant="h5">
@@ -130,7 +156,6 @@ const SignIn = () => {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                       />
-                      
 
                       <Button
                         type="submit"
@@ -144,10 +169,17 @@ const SignIn = () => {
                       <Link href="#" variant="body2">
                         Forgot password?
                       </Link>
-                      <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginTop:"10px"}}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          marginTop: "10px",
+                        }}
+                      >
                         <Link href="/orginizerSignup" variant="body2">
-                        Create New Account?
-                      </Link>
+                          Create New Account?
+                        </Link>
                       </div>
                     </Form>
                   </Formik>

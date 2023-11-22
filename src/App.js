@@ -119,7 +119,7 @@ const App = () => {
       {/* Oraganizer Routes */}
       <Route exact path="/organizer_panel" element={<Organizer_Panel />} />
       <Route exact path="/mytournaments" element={<MyTournaments />} />
-      <Route path="/overview/:id" element={<Overview />} />
+      <Route path="/overview" element={<Overview />} />
       <Route exact path="/room_settings" element={<Room_Settings />} />
       <Route exact path="/final_standings" element={<FinalStandings />} />
       <Route exact path="/registered_players" element={<Registered_Players />} />

@@ -15,23 +15,32 @@ import { getUserId } from "./Components/userID";
 import Sidebar from "./Components/sidebar";
 import Title from "./Components/title";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function preventDefault(event) {
   event.preventDefault();
 }
 
 function Dashboard() {
+  const userId = sessionStorage.getItem("id");
+  sessionStorage.removeItem('tornamentId');
+
+  console.log("User ID:", userId);
+
+  const data = useSelector((state) => {
+    return state.users;
+  });
   const [tournaments, setTournaments] = useState([]);
 
   useEffect(() => {
-    const userId = getUserId();
-
     // Fetch the tournaments for the specific organizer
+    // console.log("test qq", sessionStorage.getItem("id"))
     axios
       .get(`http://localhost:8000/tornament/tournaments/${userId}`)
       .then((response) => {
         // For each tournament, fetch and add the game name based on gameID
         console.log(tournaments);
+
         const updatedTournaments = response.data.map(async (tournament) => {
           const gameResponse = await axios.get(
             `http://localhost:8000/game/${tournament.gameID}`
@@ -142,12 +151,16 @@ function Dashboard() {
             <Table>
               <TableHead
                 sx={{
-                  backgroundColor: "primary.main",
+                  backgroundColor: "#45f884",
                   fontWeight: "bold",
                   color: "white",
                 }}
               >
-                <TableRow>
+                <TableRow
+                  sx={{
+                    color: "white",
+                  }}
+                >
                   <TableCell>Index</TableCell>
                   <TableCell>Tournament Name</TableCell>
                   <TableCell>Game Name</TableCell>

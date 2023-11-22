@@ -15,8 +15,8 @@ const HomePage = () => {
         fontFamily: 'cursive',
         textAlign: 'center',
         bgcolor: '#000',
-        mt: '10.5rem',
-        paddingTop: '100px',
+        mt: '0',
+        paddingTop: '150px',
       }}>
         Our Gaming Gallery
       </Typography>

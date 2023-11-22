@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Button, Typography, Grid, Box, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem } from '@mui/material';
 import Sidebar from './components/adminsidebar';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const TableGames = () => {
@@ -86,12 +86,16 @@ const TableGames = () => {
           },
         }
       );
-      toast("Game Added"); // Show a success message
+      // Displaying the Toastify notification
+    toast("Game Added Successfully.", { position: toast.POSITION.TOP_CENTER });
+
+      // Show a success message
       setSuccessMessage("Game added successfully");
       setOpen(false); // Close the dialog box
     } catch (error) {
       console.log(error.response.data);
-      toast.error(error.response.data); // Show an error message
+      //toast.error(error.response.data); // Show an error message
+      toast.error("Error !. Game not added.",{position:toast.POSITION.TOP_CENTER})
     }
   };
 
@@ -130,6 +134,7 @@ const TableGames = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Box sx={{ display: 'flex' }}>
         <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '100px' }}>

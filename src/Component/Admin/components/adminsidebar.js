@@ -32,6 +32,7 @@ export default function Sidebar() {
                     [`& .MuiDrawer-paper`]: {
                         width: drawerWidth,
                         boxSizing: 'border-box',
+                        borderRight: '2px solid #45f884',
                         backgroundColor: 'black', // Background color of the sidebar
                         color: 'white', // Font color of the sidebar
                     },
@@ -43,7 +44,7 @@ export default function Sidebar() {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/admin")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <InboxIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Dashboard" />
@@ -52,7 +53,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/admin_games")}>
-                                <ListItemIcon sx={{ color: 'white' }}> 
+                                <ListItemIcon sx={{ color: '#45f884' }}> 
                                     <InboxIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Settings" />
@@ -65,7 +66,7 @@ export default function Sidebar() {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/admin_games")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Games" />
@@ -74,7 +75,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/player_details")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Player" />
@@ -83,7 +84,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/organizer_details")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Organizer" />
@@ -92,7 +93,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/tournament_details")}>
-                                <ListItemIcon sx={{ color: 'white' }}> 
+                                <ListItemIcon sx={{ color: '#45f884' }}> 
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Tournament" />
@@ -101,7 +102,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/coin_package")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Coins" />
@@ -110,7 +111,7 @@ export default function Sidebar() {
 
                         <ListItem disablePadding>
                             <ListItemButton onClick={() => navigate("/payments")}>
-                                <ListItemIcon sx={{ color: 'white' }}>
+                                <ListItemIcon sx={{ color: '#45f884' }}>
                                     <MailIcon />
                                 </ListItemIcon>
                                 <ListItemText primary="Payment Requests" />

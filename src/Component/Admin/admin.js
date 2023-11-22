@@ -89,7 +89,7 @@ function Admin() {
       });
     }, []);
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex' ,backgroundColor:'white'}}>
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: '64px' }}>
         <Box sx={{ p: 3 }}>
@@ -154,13 +154,13 @@ function Admin() {
           {/* Data Table for Tournament Summary */}
           <TableContainer sx={{ marginTop: '16px' }}>
             <Table>
-              <TableHead sx={{ backgroundColor: 'grey', fontWeight: 'bold', color: 'white' }}>
-                <TableRow>
-                  <TableCell>Index</TableCell>
-                  <TableCell>Tournament Name</TableCell>
-                  <TableCell>Created Date</TableCell>
-                  <TableCell>Game Name</TableCell>
-                  <TableCell>Organizer</TableCell>
+              <TableHead sx={{ backgroundColor: 'black', fontWeight: 'bold', color: 'green' }}>
+                <TableRow sx ={{color: '#45f884'}}>
+                  <TableCell sx ={{color: '#45f884'}}>Index</TableCell>
+                  <TableCell sx ={{color: '#45f884'}}>Tournament Name</TableCell>
+                  <TableCell sx ={{color: '#45f884'}}>Created Date</TableCell>
+                  <TableCell sx ={{color: '#45f884'}}>Game Name</TableCell>
+                  <TableCell sx ={{color: '#45f884'}}>Organizer</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

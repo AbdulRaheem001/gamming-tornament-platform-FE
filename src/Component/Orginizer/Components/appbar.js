@@ -35,11 +35,23 @@ export default function Appbar() {
     <>
       <CssBaseline />
       <AppBar position="fixed" 
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, padding: '2px 80px', }}>
+        sx={{
+            backgroundColor: '#000000',
+            color: '#ffffff',
+            boxShadow: 'none',
+            borderBottom: '2px solid #45f884',
+            padding: '2px 50px',
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+          }}
+>
         <Toolbar sx={{ paddingLeft: '1rem', paddingRight: '1rem' }}>
-          <Typography variant="h6" noWrap component="div">
-            Oraganizer Panel
-          </Typography>
+        <Typography
+          variant="h4"
+          component="div"
+          sx={{ flexGrow: 6, color: '#45f884', fontFamily: 'cursive' }}
+        >
+          Organ<span style={{ color: '#fff' }}>izer</span> Panel
+        </Typography>
           <div style={{ flexGrow: 1 }} />
           <IconButton
             color="inherit"

@@ -14,7 +14,7 @@ const Header = () => {
         alignItems: 'center',
         bgcolor: '#000',
         margin: '0',
-        marginTop: '5%',
+        marginTop: '10',
       }}
     >
       <Grid container spacing={0}>

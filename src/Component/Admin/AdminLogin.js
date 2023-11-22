@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from "react-toastify"; // Import toast
 const validationSchema = Yup.object().shape({
   email: Yup.string()
     .email('Invalid email address')
@@ -45,12 +46,16 @@ const AdminLogin = () => {
         navigate("/admin")
       })
       .catch((error) => {
-        console.error('Sign in failed:', error.response.data);
+        console.error("Sign in failed:", error.response.data);
+        toast.error("Failed to log in. Please check your credentials.", {
+          position: toast.POSITION.TOP_CENTER,
+        });
       });
   };
 
   return (
     <ThemeProvider theme={createTheme()}>
+      <ToastContainer/>
       <Box
         sx={{
           backgroundColor: '#000', // Black background

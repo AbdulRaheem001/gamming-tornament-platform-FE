@@ -9,12 +9,12 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const Overview=() =>{
-  const { id } = useParams();
+  const tornamentId = sessionStorage.getItem("tornamentId");
   const [ tornamentData, setTornamentData ] = useState({});
   const [dateTime, setDateTime]=useState('');
   useEffect(() => {
     axios
-      .get(`http://localhost:8000/tornament/getTournamentById/${id}`)
+      .get(`http://localhost:8000/tornament/getTournamentById/${tornamentId}`)
       .then((res) => {
         setTornamentData(res.data);
         setDateTime (new Date(res.data.started));

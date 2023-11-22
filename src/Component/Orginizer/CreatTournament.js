@@ -18,7 +18,12 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Sidebar from "./Components/sidebar";
-import { getUserId } from './Components/userID';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+
+const userId = sessionStorage.getItem("id");
+
 const initialState = {
   platform: "All",
   searchTerm: "",
@@ -28,7 +33,7 @@ const initialState = {
   tournamentName: "",
   teamSize: "",
   prizePool: "",
-  organizerID: getUserId(),
+  organizerID: userId,
   gameData: [],
   selectedGame: null,
 };
@@ -64,6 +69,7 @@ const reducer = (state, action) => {
 };
 
 const CreatTournament = () => {
+  sessionStorage.removeItem('tornamentId');
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // Destructure state for easier access
@@ -143,8 +149,8 @@ const CreatTournament = () => {
   }));
   const handleCreateProject =
     (() => {
-      console.log('ORG ID->',getUserId())
-      handleSetOrganizerID(getUserId())
+      console.log('ORG ID->',userId)
+      handleSetOrganizerID(userId)
       console.log("lin1 134");
       const tournamentData = {
         tournamentName,
@@ -152,7 +158,7 @@ const CreatTournament = () => {
         fee: projectName,
         winningPrice: prizePool,
         gameID: selectedGame,
-        organizerID: getUserId(),
+        organizerID: userId,
         started: Date.now(),
         description: "No description given",
         rules: "No rule yet defined",
@@ -167,12 +173,22 @@ const CreatTournament = () => {
         .then((response) => {
           console.log("line ->165");
           console.log("Tournament created successfully:", response.data);
+    
+          // Display a success message using Toastify
+          toast.success("Tournament created", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         })
         .catch((error) => {
           console.log("line ->169")
           console.error("Error creating tournament:", error);
+    
+          // Display an error message using Toastify
+          toast.error("Failed to create tournament. Please try again.", {
+            position: toast.POSITION.TOP_CENTER,
+          });
         });
-
+    
       handleSetOpenDialogBox(false);
     });
 
@@ -188,6 +204,7 @@ const CreatTournament = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Box sx={{ display: "flex" }}>
         <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, p: 3, paddingTop: "64px" }}>

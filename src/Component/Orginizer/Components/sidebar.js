@@ -21,7 +21,7 @@ const drawerWidth = 240;
 
 export default function Sidebar() {
   const navigate = useNavigate();
-
+  const tornamentId = sessionStorage.getItem("tornamentId");
   return (
     <Box sx={{ display: 'flex' }}>
       <Drawer
@@ -29,7 +29,10 @@ export default function Sidebar() {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+          
+          [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box',borderRight :'2px solid #45f884',backgroundColor: 'black', // Background color of the sidebar
+          color: 'white', // Font color of the sidebar
+      },
         }}
       >
         <Toolbar />
@@ -37,7 +40,7 @@ export default function Sidebar() {
           <List>
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/organizer_panel")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
@@ -46,7 +49,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/mytournaments")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary="My Tournaments" />
@@ -55,7 +58,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/creat_Tournament")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <InboxIcon />
                 </ListItemIcon>
                 <ListItemText primary="Create Tournaments" />
@@ -63,11 +66,12 @@ export default function Sidebar() {
             </ListItem>
 
           </List>
-          <Divider />
-          <List>
+          <Divider sx={{ backgroundColor: '#45f884' }} />
+          {/* I want to add condition if tornamentId has value the below nevigations show otherwise not show */}
+          {tornamentId? (<List>
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/overview")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <MailIcon />
                 </ListItemIcon>
                 <ListItemText primary="Overview" />
@@ -76,7 +80,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/room_settings")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <MailIcon />
                 </ListItemIcon>
                 <ListItemText primary="Room Settings" />
@@ -85,7 +89,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/registered_players")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <MailIcon />
                 </ListItemIcon>
                 <ListItemText primary="Player Details" />
@@ -94,7 +98,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/organizer_comments")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <MailIcon />
                 </ListItemIcon>
                 <ListItemText primary="Discussion" />
@@ -103,7 +107,7 @@ export default function Sidebar() {
 
             <ListItem disablePadding>
               <ListItemButton onClick={() => navigate("/final_standings")}>
-                <ListItemIcon>
+                <ListItemIcon sx={{ color: '#45f884' }}>
                   <MailIcon />
                 </ListItemIcon>
                 <ListItemText primary="Final Results" />
@@ -111,7 +115,9 @@ export default function Sidebar() {
             </ListItem>
 
 
-          </List>
+          </List>):null }
+          
+          
         </Box>
       </Drawer>
       <Appbar /> {/* Render the Appbar component here */}
